@@ -1,0 +1,135 @@
+<script>
+$(document).ready(function(){
+  //key(プレイヤーが1，2番か否か)をデータベースで管理して脆弱性をなくしたい、
+  //今はF5押すとkeyが初期化される
+  var repeatSearch;
+  var key = false;
+  var opponent_names = [];
+  var opponentname ='';
+  updateroom('');
+  $('.cancelapply').hide();
+  $('.changewindow').hide();
+  if(key){
+    changebutton();
+    $('.changewindow').show();
+  }
+  <%unless(lobby.applytime.nil?)%>
+    changebutton();
+    search();
+  <%end%>
+
+  $('#settime').on('click',function(){
+    $.when(updatelobby('<%=Time.now%>'),updateroom('')).then(function(){
+    changebutton();
+    search();
+    });
+  });
+
+
+  $('#deletetime').on('click',function(){
+    $.when(updatelobby(''),updateroom('')).then(function(){
+      changebutton();
+      $('#waitingpeople').empty();
+      $('#waitinglist').empty();
+      clearInterval(repeatSearch);
+    });
+  });
+
+  function changebutton(){
+    $('.apply').toggle();
+    $('.cancelapply').toggle();
+  }
+  function updatelobby(time){
+    var formdata = {
+      loginname: '<%=my_loginname%>',
+      applytime: time
+    };
+    $.ajax({
+      url: 'lobbies/'+'<%=lobby.id%>',
+      type: 'patch',
+      data: formdata
+    });
+  }
+  function updateroom(name){
+    var formdata = {
+      loginname: '<%=my_loginname%>',
+      opponent: name,
+      myfield: '',
+      hits: ''
+    };
+    $.ajax({
+      url: 'rooms/'+'<%=room.id%>',
+      type: 'patch',
+      data: formdata
+    });
+  }
+  function search(){
+    var my_place = 0;
+    var my_prev_place = 0;
+    var counter = 0;
+    repeatSearch = setInterval(function(){
+      $.when(
+        $.ajax({
+          url: '/lobbies/',
+          type: 'get',
+          dataType: 'json'
+        })
+      ).then(function(data){
+        $('#waitingpeople').empty();
+        $('#waitinglist').empty();
+        counter = counter%2 + 1;
+        var len = data.length;
+        $.each(data, function(i, data){
+          opponent_names[i] = data.loginname;
+          if(data.loginname=='<%=my_loginname%>'){
+            var v = i+1;
+            $('#waitinglist').append('you are '+v+' in line<br>');
+            my_place = v;
+            if((v==1||v==2)&&len>=2||key){
+              if(my_place==my_prev_place||key){
+                v -= 0;
+                $('.cancelapply').hide();
+                $('.changewindow').show();
+                key = true;
+                $('#waitinglist').append('you are truly '+v+' in line with'+len);
+                //$('h1').html(v);
+                opponentname = opponent_names[2-v];
+                clearInterval(repeatSearch);
+                //$('h1').append('v');
+                deleteandgo();
+              }
+            }
+            if(counter==1){
+              my_prev_place = v;
+            }
+          }
+          $('#waitingpeople').append(data.loginname+' '+data.applytime+'<br>');
+        });
+      });
+    }, 1000);
+  }
+  function deleteandgo(){
+    $.when(updateroom(opponentname)).then(function(){
+      setInterval(() => {
+      $('#waitingpeople').empty();
+      $('#waitinglist').empty();
+      $.ajax({
+        url: '/rooms/',
+        type: 'get',
+        dataType: 'json'
+      }).done(function(data){
+        $.each(data, function(i, data){
+          if(data.loginname==opponentname){
+            if(data.opponent=='<%=my_loginname%>'){
+              $.when(updatelobby('')).then(function(){
+                window.location.href = '/rooms/prepare';
+              });
+            }
+          }
+        });
+      });
+      }, 3000);
+    });
+  }
+});
+</script>

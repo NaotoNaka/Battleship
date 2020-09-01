@@ -1,0 +1,39 @@
+// Place all the styles related to the Sessions controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+body{
+  background-color: royalblue;
+  color: white;
+}
+.field, .actions{
+  text-align: center;
+}
+h1{
+  color: white;
+  font-size: 200%;
+  text-align: center;
+}
+.actions input{
+  padding: 5px 10px;
+  border: solid 1px white;
+  border-radius: 1px;
+  background-color: navy;
+  color: #FFF;
+}
+.field input{
+  width: 30%;
+	padding: 5px;
+	border: 2px solid white;
+  border-radius: 4px;
+  background-color: navy;
+  color: white;
+}
+.field input:focus{
+  border: 2px solid red;
+	outline: none;
+}
+#notice, #havenoaccount{
+  font-size: 130%;
+  color: white;
+}

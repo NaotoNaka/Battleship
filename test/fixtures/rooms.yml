@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  loginname: MyString
+  opponent: MyString
+  myfield: MyString
+  hits: MyString
+
+two:
+  loginname: MyString
+  opponent: MyString
+  myfield: MyString
+  hits: MyString

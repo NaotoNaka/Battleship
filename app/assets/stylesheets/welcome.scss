@@ -1,0 +1,29 @@
+// Place all the styles related to the Welcome controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+a:visited{
+  color: magenta;
+}
+h1{
+  font-family: monospace;
+  font-size: 50px;
+}
+.topirasutoya{
+  width: 40%;
+}
+.divtopirasutoya{
+  text-align: center;
+}
+.apply, .cancelapply{
+  font-size: 40px;
+  text-align: center;
+}
+p{
+  font-size: 40px;
+}
+#settime, #deletetime{
+  width: 50%;
+  height: 60px;
+  font-size: 50px;
+}

@@ -1,0 +1,22 @@
+<%my_loginname = User.find(session[:user_id]).loginname%>
+<%lobby = @lobbies.find_by(loginname: my_loginname)%>
+<%room = @rooms.find_by(loginname: my_loginname)%>
+<div class='divtopirasutoya'>
+  <img src='/assets/war_senkan_man.png' class='topirasutoya'>
+</div>
+<div class='apply'>
+  <button id='settime'>出撃！</button>
+</div>
+<div class='cancelapply'>
+  <p class='message'>
+    待機中...
+  </p>
+  <br><button id='deletetime'>キャンセル</button>
+</div>
+<p class='changewindow'>
+  対戦相手発見！
+</p>
+<p id='waitinglist'style="visibility:hidden"></p>
+<p id='waitingpeople'style="visibility:hidden"></p>
+
+<%=render 'indexjs', lobby: lobby, room: room, my_loginname: my_loginname%>

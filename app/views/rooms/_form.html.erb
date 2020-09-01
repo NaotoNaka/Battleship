@@ -1,0 +1,42 @@
+<%= form_with(model: room, local: true) do |form| %>
+  <% if room.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(room.errors.count, "error") %> prohibited this room from being saved:</h2>
+
+      <ul>
+      <% room.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :loginname %>
+    <%= form.text_field :loginname, id: :room_loginname %>
+    <!--エラー対策で一時的にコメント-->
+    <%# form.hidden_field :loginname, :value => User.find(session[:user_id]).loginname%>
+  </div>
+
+  <div class="field">
+    <%= form.label :opponent %>
+    <%= form.text_field :opponent, id: :room_opponent %>
+    <%# form.hidden_field :opponent, :value => ""%>
+  </div>
+
+  <div class="field">
+    <%= form.label :myfield %>
+    <%= form.text_field :myfield, id: :room_myfield, value: @myShipCoordinates %>
+    <%# form.hidden_field :myfield, :value => @coordinates %>
+  </div>
+
+  <div class="field">
+    <%= form.label :hits %>
+    <%# form.text_field :hits, id: :room_hits, value: @myHits %>
+    <%= form.hidden_field :hits, :value => ""%>
+  </div>
+
+  <div class="actions">
+    <%= form.submit("決定！") %>
+  </div>
+<% end %>

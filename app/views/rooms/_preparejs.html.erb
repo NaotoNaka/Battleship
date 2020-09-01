@@ -1,0 +1,188 @@
+<script>
+$(document).ready(function(){
+  $.when(updateroom('')).done(function(){
+  var shipSet = [];
+  shipSet.fill(false);
+  var type;
+  var way;
+  var coordinates;
+  var row;
+  var col;
+  //一旦個々の座標に分ける
+  var coorAry;
+  var splitAry;
+  //船は重なっていないか
+  var collision = false;
+  $('.id').on('click', function(){
+    type = $(this).data('id');
+  });
+  $('.way').on('click', function(){
+    way = $(this).data('id');
+  });
+  $('.reset').on('click', function(){
+    type = -1;
+    way = -1;
+    $('.coors').html('');
+    $('.myfield').html('');
+    $('.field').css('visibility', 'visible');
+    $('.id').css('visibility', 'visible');
+    shipSet.fill(false);
+  });
+  //もし座標、艦の種類と艦の向きを指定していたら
+  
+  $('.field').on('click', function(){
+    if(0<=type && 0<=way){
+      coordinates = $(this).data('id');
+      $('.coors').html(coordinates);
+      var pAry = coordinates.split(',');
+      coorAry = $('.myfield').text();
+      $('.myfield2').html(coorAry);
+      splitAry = coorAry.split('|');
+      row = pAry[0];
+      col = pAry[1];
+      row -= 0;
+      col -= 0;
+      row1 = row + 1;
+      row2 = row + 2;
+      row3 = row + 3;
+      col1 = col + 1;
+      col2 = col + 2;
+      col3 = col + 3;
+      rowm1 = row - 1;
+      if(type < 4){
+        //駆逐艦、軽巡、重巡、戦艦の場合
+        if(way == 0){
+          //向きが縦なら
+          for (var i=0; i<type+2; i++){
+            //他の船と衝突していないか
+            var rowi = row+i;
+            if($.inArray(rowi+","+col, splitAry) != -1){ collision = true; }
+          }
+          //範囲内かつ衝突がなければ
+          var rowlimit = 9-type+1;
+          if(row<rowlimit-1 && !collision){
+            for(var i=0; i<type+2; i++){
+              var rowi = row-0;
+              rowi += i;
+              coorAry += rowi+','+col+'|';
+            }
+            //それぞれ押されたことを示す
+            shipSet[type] = true;
+          }else{ collision  = true;}
+        }else if(way == 1){
+          //向きが縦なら
+          for (var i=0; i<type+2; i++){
+            //他の船と衝突していないか
+            var coli = col+i;
+            if($.inArray(row+","+coli, splitAry) != -1){ collision = true; }
+          }
+          //範囲内かつ衝突がなければ
+          var collimit = 9-type+1;
+          if(col<collimit-1 && !collision){
+            for(var i=0; i<type+2; i++){
+              var coli = col-0;
+              coli += i;
+              coorAry += row+','+coli+'|';
+            }
+            //それぞれ押されたことを示す
+            shipSet[type] = true;
+          }else{ collision  = true;}
+        }
+      }else if (type == 4){
+        if(way==0){
+          for(var i=0; i<3; i++){
+            var rowi = row + i;
+            if($.inArray(rowi+","+col, splitAry) != -1){ collision = true; }
+          }
+          for(var i=0; i<3; i++){
+            var rowi1 = row + i + 1;
+            if($.inArray(rowi1+","+col1, splitAry) != -1){ collision = true; }
+          }
+          if(row<7 && col<9 && !collision){
+            coorAry += row+","+col+"|"+row1+","+col+"|"+row2+","+col+"|"+row1+","+col1+"|"+row2+","+col1+"|"+row3+","+col1+"|";
+            shipSet[type] = true;
+          }else{ collision  = true;}
+        }else{
+          for(var i=0; i<3; i++){
+            var coli = col + i;
+            if($.inArray(row+","+coli, splitAry) != -1){ collision = true; }
+          }
+          for(var i=0; i<3; i++){
+            var coli1 = col + i + 1;
+            if($.inArray(rowm1+","+coli1, splitAry) != -1){ collision = true; }
+          }
+          if(row>0 && col<7 && !collision){
+            coorAry += row+","+col+"|"+row+","+col1+"|"+row+","+col2+"|"+rowm1+","+col1+"|"+rowm1+","+col2+"|"+rowm1+","+col3+"|";
+            shipSet[type] = true;
+          }else{ collision  = true;}
+        }
+      }else if(type == 5){
+        if(way == 0){
+          for(var i=0; i<3; i++){
+            rowi = row + i;
+            if($.inArray(rowi+","+col, splitAry) != -1){ collision = true; }
+          }
+          if($.inArray(row1+","+col1, splitAry) != -1){ collision = true; }
+          if(row<8 && col<9 && !collision){
+            coorAry += row+","+col+"|"+row1+","+col+"|"+row2+","+col+"|"+row1+","+col1+"|";
+            shipSet[type] = true;
+          }else{ collision  = true;}
+        }else{
+          for(var i=0; i<3; i++){
+            coli = col + i;
+            if($.inArray(row+","+coli, splitAry) != -1){ collision = true; }
+          }
+          if($.inArray(rowm1+","+col1, splitAry) != -1){ collision = true; }
+          if(row>0 && col<8 && !collision){
+            coorAry += row+","+col+"|"+row+","+col1+"|"+row+","+col2+"|"+rowm1+","+col1+"|";
+            shipSet[type] = true;
+          }else{ collision  = true;}
+        }
+      }
+      //$('h2').html(coorAry);
+      $('.myfield').html(coorAry);
+      var splitcoor = coorAry.split("|");
+      $.each(splitcoor, function(index, c){
+        var posAry = c.split(",");
+        $('#'+posAry[0]+posAry[1]).css('visibility', 'hidden');
+      });
+      var torf = 0;
+      $(shipSet).each(function(i, ship){
+        if(ship){
+          $('#'+i).css('visibility', 'hidden');
+          torf += 1;
+        }
+      });
+      if(!collision){
+        type = -1;
+        way = -1;
+      }
+      collision = false;
+    }
+    if(torf==6){ $('.gotobattle').css('visibility', 'visible'); }
+  });
+
+  $('.gotobattlebutton').on('click', function(){
+    $('.vals').val(coorAry);
+    $.when(updateroom(coorAry)).done(function(){
+      //window.location.href = '/rooms/'+<%=room.id%>+'/edit';
+      window.location.href = '/rooms/battle';
+    });
+  });
+  });
+
+  function updateroom(field){
+    var formdata = {
+      loginname:'<%=room.loginname%>',
+      opponent: '<%=room.opponent%>',
+      myfield: field,
+      hits: ''
+    };
+    $.ajax({
+      url: '<%=room.id%>',
+      type: 'patch',
+      data: formdata
+    });
+  }
+});
+</script>

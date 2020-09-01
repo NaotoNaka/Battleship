@@ -1,0 +1,37 @@
+<h1>BattleShip</h1>
+<%user = User.find(session[:user_id])%>
+<%unless @lobbies.find_by(loginname: user.loginname).nil?%>
+  <%unless @rooms.find_by(loginname: user.loginname).nil?%>
+    <%=render 'withlobby'%>
+  <%end%>
+<%end%>
+<script>
+if(<%=@lobbies.find_by(loginname: user.loginname).nil?%>){
+  var lobbyform = {
+    loginname: '<%=user.loginname%>',
+    applytime: ''
+  };
+  $.ajax({
+    url: 'lobbies',
+    type: 'post',
+    data: lobbyform
+  }).done(function(){
+    window.location.href = location.href;
+  });
+}
+if(<%=@rooms.find_by(loginname: user.loginname).nil?%>){
+  var lobbyform = {
+    loginname: '<%=user.loginname%>',
+    opponent: '',
+    myfield: '',
+    hits: ''
+  };
+  $.ajax({
+    url: 'rooms',
+    type: 'post',
+    data: lobbyform
+  }).done(function(){
+    window.location.href = location.href;
+  });
+}
+</script>

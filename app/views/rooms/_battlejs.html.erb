@@ -1,0 +1,142 @@
+<script>
+$(document).ready(function(){
+  var hitsprev = '<%=@room.hits%>';
+  var hitsnow;
+  var mode = 0;
+  var ifend = 0;
+  if(scan('<%=@hisroom.myfield%>', '<%=@hisroom.hits%>')){
+    $('h1').html('勝利！');
+    ifend = 1;
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 3000);
+  }else if (scan('<%=@room.myfield%>', '<%=@room.hits%>')){
+    $('h1').html('敗北...');
+    ifend = 1;
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 3000);
+  }
+  if(ifend==0){
+    
+  if(Number('<%=@hisroom.id%>')<Number('<%=@room.id%>')){
+    if('<%=@hisroom.hits%>'.length=='<%=@room.hits%>'.length&&'<%=@hisroom.myfield%>'.length!=0){
+      $('h1').html('自分の攻撃');
+      updt2();
+    }else{
+      $('h1').html('待機！');
+      interv = setInterval(function(){
+        updt();
+      }, 2000);
+    }
+  }else{
+    if('<%=@hisroom.hits%>'.length!='<%=@room.hits%>'.length&&'<%=@hisroom.myfield%>'.length!=0){
+      $('h1').html('自分の攻撃');
+      updt2();
+    }else{
+      $('h1').html('待機！');
+      setInterval(() => {
+        updt();
+      }, 2000);
+    }
+  }
+  }
+
+  function updt(){
+    $.ajax({
+      url: '/rooms/',
+      type: 'get',
+      dataType: 'json'
+    }).done(function(data){
+      $.each(data, function(i, data){
+        if(data.loginname=='<%=@room.loginname%>'){
+          hitsnow = data.hits;
+          var splithits = hitsnow.split('|');
+          $.each(splithits, function(i, hit){
+            var Ids = hit.split(',');
+            if(Ids[2]==1){
+              $('#m'+coorId).css('background-color',  '#ff0000');
+            }else if(Ids[2]==0){
+              $('#m'+coorId).css('background-color',  '#f5f5f5');
+            }
+          });
+          if(hitsnow.length!=hitsprev.length){
+            window.location.href = location.href;
+          }
+        }
+        if(data.loginname=='<%=@hisroom.loginname%>'&&'<%=@hisroom.myfield%>'.length==0){
+          if(data.myfield.length!=0){
+            window.location.href = location.href;
+          }
+        }
+      });
+    });
+  }
+  function updt2(){
+    $('.unclicked').on('click', function(){
+      //自分のhitsを更新
+      var newhit = '';
+      var coorId = $(this).data('id');
+      var Ids = coorId.split('-');
+      if(Ids[2]==1){
+        $('#h'+coorId).css('background-color',  '#ff0000');
+      }else if(Ids[2]==0){
+        $('#h'+coorId).css('background-color',  '#f5f5f5');
+      }
+      newhit = '<%=@hisroom.hits%>'+Ids[0]+','+Ids[1]+'|';
+      var formdata = {
+        hits: newhit
+      };
+      $.ajax({
+        url: '<%=@hisroom.id%>',
+        type: 'patch',
+        data: formdata
+      }).done(function(){
+        window.location.href = location.href;
+      });
+    });
+  }
+  function scan(fieldstr, hitstr){
+    var fieldarr = fieldstr.split('|');
+    var hitarr = hitstr.split('|');
+    var num = 0;
+    var total = 0;
+    $.each(hitarr, function(i, hit){
+      if($.inArray(hit, fieldarr) != -1){
+        num += 1;
+      }
+      
+    });
+    if(num==25){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  function ini(label){
+    var formdata = {
+      myfield: '',
+      hits: ''
+    };
+    $.ajax({
+      url: '<%=@room.id%>',
+      type: 'patch',
+      data: formdata
+    }).done(function(){
+      setTimeout(() => {
+        $('h1').html(label);
+      }, 5000);
+    });
+  }
+  $('.reset').on('click', function(){
+    var formdata = {
+      hits: ''
+    };
+    $.ajax({
+      url: '<%=@room.id%>',
+      type: 'put',
+      data: formdata
+    });
+  });
+});
+</script>

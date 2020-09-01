@@ -1,0 +1,85 @@
+<%my_loginname = User.find(session[:user_id]).loginname%>
+<%room = @rooms.find_by(loginname: my_loginname)%>
+<h1>艦を配置せよ！</h1>
+<div style="visibility:hidden">
+  <%=form_with(model: room, class: 'init') do |form|%>
+    <%= form.hidden_field :myfield, :value => ''%>
+    <%= form.hidden_field :hits, :value => ''%>
+    <%= form.submit%>
+  <%end%>
+</div>
+
+<table id='edit'>
+  <tbody>
+    <tr><td>
+      <table id='id'>
+        <tbody>
+          <tr><th colspan='7'>艦の種類</th></tr>
+          <tr><th><img src="/assets/destroyer.png"></th>
+            <th><img src="/assets/lightCru.png"></th>
+            <th><img src="/assets/heavyCru.png"></th>
+            <th><img src="/assets/battleShip.png"></th>
+            <th><img src="/assets/aircraftCar.png"></th>
+            <th><img src="/assets/submarine.png"></th>
+            <th>リセット</th>
+          </tr>
+          <tr>
+            <td><button class='id' id ='0' data-id='0'>駆逐艦</button></td>
+            <td><button class='id' id='1' data-id='1'>軽巡洋艦</button></td>
+            <td><button class='id' id='2' data-id='2'>重巡洋艦</button></td>
+            <td><button class='id' id='3' data-id='3'>戦艦</button></td>
+            <td><button class='id' id='4' data-id='4'>航空母艦</button></td>
+            <td><button class='id' id='5' data-id='5'>潜水艦</button></td>
+            <td><button class='reset'>リセット</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+
+    <td>
+      <table id='way'>
+        <tbody>
+          <tr><th colspan='2'>艦の向き</th></tr>
+          <tr><th><img src="/assets/submarine.png"></th>
+            <th><img src="/assets/submarine_horizontal.png"></th>
+          </tr>
+          <tr>
+            <td><button class='way' data-id='0'>縦</button></td>
+            <td><button class='way' data-id='1'>横</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tbody>
+</table>
+
+<br>
+<div class='gotobattle'  style="visibility:hidden">
+  <button class='gotobattlebutton'>出撃開始！</button>
+</div>
+<br>
+<table id='editField'>
+  <tbody>
+    <tr>
+      <td></td>
+      <% (1..10).each do |i|%>
+        <td><%= i %></td>
+      <% end %>
+    </tr>
+    <% (0..9).each do |i| %>
+      <tr><td><%= i+1 %></td>
+      <% (0..9).each do |j| %>
+        <td><button class='field' id = '<%=i%><%=j%>' data-id='<%=i%>,<%=j%>'>　</button></td>
+      <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<p class='myfield' style="visibility:hidden"><%=room.myfield%></p>
+<!--
+<p class='ship'><p>
+<p class='ways'><p>
+<p class='coors'><p>
+<p class='myfield2'></p>-->
+<%=render 'preparejs', room: room%>

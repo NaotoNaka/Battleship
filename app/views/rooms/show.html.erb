@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Loginname:</strong>
+  <%= @room.loginname %>
+</p>
+
+<p>
+  <strong>Opponent:</strong>
+  <%= @room.opponent %>
+</p>
+
+<p>
+  <strong>Myfield:</strong>
+  <%= @room.myfield %>
+</p>
+
+<p>
+  <strong>Hits:</strong>
+  <%= @room.hits %>
+</p>
+
+<%= link_to 'Edit', edit_room_path(@room) %> |
+<%= link_to 'Back', rooms_path %>

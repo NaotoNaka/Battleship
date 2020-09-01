@@ -1,0 +1,42 @@
+<h1>New User</h1>
+
+<%= render 'form', user: @user, classnum: '1'%>
+<%= render '/lobbies/form', lobby: @lobby, classnum: '2'%>
+<%# render '/rooms/form', lobby: @room, classnum: '3'%>
+<%= form_with(model: @room, class: 'roomform3') do |form| %>
+  <div class="field">
+    <%= form.label :loginname %>
+    <%= form.text_field :loginname, id: :room_loginname, :value => '', class: 'myloginname3' %>
+  </div>
+  <div class="actions" style='visibility:hidden'>
+    <%= form.submit() %>
+  </div>
+<% end %>
+<button class='submitbutton' style='visibility:hidden'>
+Create Account
+</button>
+<%= link_to 'Back', login_url %>
+<script>
+
+$('.lobbyform2').hide();
+$('.roomform3').hide();/*
+$('.submitbutton').on('click', function(){
+  var myname = $('.myloginname1').val();
+  $('.myloginname2').val(myname);
+  $('.myloginname3').val(myname);
+  if(myname.length>0){
+    $('.userform1').submit();
+    //submitforms();
+  }
+  window.location.href = '/login/';
+});
+function submitforms(){
+  $('.userform1').submit();
+  setTimeout(() => {
+    $('.lobbyform2').submit();
+    setTimeout(() => {
+      $('.roomform3').submit();
+    }, 500);
+  }, 500);
+}*/
+</script>

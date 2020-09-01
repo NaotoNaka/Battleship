@@ -1,0 +1,58 @@
+// Place all the styles related to the Rooms controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#edit{
+  /*中央揃えにする*/
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+#editField{
+  width: 440px;
+  height: 440px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+#id, #way, #editField{
+  background-color: navy;
+  border: solid 1px white;
+  font-size: 150%;
+}
+#id td, #id th, #way td, #way th{
+  border: solid 1px white;
+}
+#edit button{
+  color: black;
+  background: deepskyblue;
+  border: solid 1px white;
+}
+#editField button{
+  background-color: deepskyblue;
+  border: solid 1px white;
+  width: 30px;
+  height: 30px;
+}
+
+#myfield, #oppoField{
+  width: 300px;
+  height: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+#myfield td, #oppoField td{
+  width: 20px;
+  height: 20px;
+}
+.gotobattle{
+  text-align: center;
+}
+.gotobattle button{
+  background-color: deepskyblue;
+  border: solid 4px springgreen;
+  width: 30%;
+  height: 60px;
+  font-size: 30px;
+}

@@ -1,0 +1,27 @@
+<%= form_with(model: lobby, class: 'lobbyform'+classnum) do |form| %>
+  <% if lobby.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(lobby.errors.count, "error") %> prohibited this lobby from being saved:</h2>
+
+      <ul>
+      <% lobby.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <div class="field">
+    <%= form.label :loginname %>
+    <%= form.text_field :loginname, id: :lobby_loginname, class: 'myloginname'+classnum %>
+  </div>
+
+  <div class="field">
+    <%= form.label :applytime %>
+    <%= form.hidden_field :applytime, :value => '' %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

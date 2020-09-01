@@ -1,0 +1,23 @@
+<h1>ログイン</h1>
+<p><%= flash[:alert]%></p>
+<p id='notice'><%= flash[:notice]%></p>
+<%= form_with(url: login_path, local: true) do |form| %>
+  <div class="field">
+    <%= form.label :loginname %>
+    <%= form.text_field :loginname, id: :user_loginname %>
+  </div>
+
+  <div class="field">
+    <%= form.label :password %>
+    <%= form.password_field :password, id: :user_password %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit("ログイン") %>
+  </div>
+
+  <% unless session[:user_id] != nil %>
+    <p id='havenoaccount'>アカウントを持っていませんか?</p>
+    <%= link_to '新しいアカウントを作りましょう!', new_user_path %>
+  <% end %>
+<% end %>

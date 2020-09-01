@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BattleShip</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <% if session[:user_id] != nil%>
+      <div class="loggedinBackground">
+        <%= "#{User.find(session[:user_id]).loginname} としてログインされています" %>
+        <%= link_to "ログアウト", logout_path, method: 'delete' %>
+      </div>
+    <% else %>
+      <div class="notLoggedinBackground">
+        <%='ログインされていません'%>
+        <%= link_to "ログイン", login_path %>
+      </div>
+    <% end %>
+    <%= yield %>
+  </body>
+</html>
