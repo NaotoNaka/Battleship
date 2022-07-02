@@ -2,7 +2,7 @@
 
 Implementation of game "Battleship"
 
-Requires 2 players
+Requires 2 players (bowsers if you want to play by yourself)
 
 # versions
 
